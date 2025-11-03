@@ -1,23 +1,25 @@
-# 🐍 Use a more compatible base image
+# ✅ Use official Python image with Debian (not Alpine)
 FROM python:3.9-slim
 
 # Set working directory
 WORKDIR /app
 
-# Copy all files
+# Copy project files
 COPY . .
 
-# 🧩 Install system dependencies
-RUN apt update && apt install -y \
-    gcc \
-    g++ \
-    libffi-dev \
-    python3-dev \
-    ffmpeg \
-    aria2 \
+# 🔧 Install required system packages
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        gcc \
+        g++ \
+        libffi-dev \
+        python3-dev \
+        ffmpeg \
+        aria2 \
+        build-essential \
     && pip install --upgrade pip setuptools wheel \
     && pip install --no-cache-dir -r requirements.txt \
-    && apt clean && rm -rf /var/lib/apt/lists/*
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# 🚀 Run the bot
+# ✅ Run your bot
 CMD ["python", "main.py"]
