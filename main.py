@@ -182,7 +182,23 @@ async def account_login(bot: Client, m: Message):
                 cc = f'**[🎥]Vid Id  ➠** {str(count).zfill(3)}\n** Tᴏᴘɪᴄ ➠** {name1} [{raw_text2}] .mkv \n\n** Bᴀᴛᴄʜ Nᴀᴍᴇ ➠ ** {b_name}\n\n** 𝖠ᴘᴘ 𝖭ᴀᴍᴇ ➤ ** {app_name}\n\n** 🌟Dᴏᴡɴʟᴏᴀᴅ Bʏ ➤ {MR}**\n\n'
                 cc1 = f'**[📕]Pdf Id  ➠** {str(count).zfill(3)}\n** Tᴏᴘɪᴄ ➠** {name1} .pdf \n\n** Bᴀᴛᴄʜ Nᴀᴍᴇ ➠:** {b_name}\n\n** 𝖠ᴘᴘ 𝖭ᴀᴍᴇ ➤ ** {app_name}\n\n** 🌟Dᴏᴡɴʟᴏᴀᴅ Bʏ ➤ {MR}**\n\n'                   
 
-                if "drive" in url or ".pdf" in url or "pdfs" in url:
+                # Handle rwa-play-on PDF and Proxy links
+if "rwa-play-on.vercel.app/pdf" in url:
+    pdf_file = helper.download_pdf_proxy(url, f"{name}.pdf")
+    if pdf_file:
+        await bot.send_document(chat_id=channel_id, document=pdf_file, caption=cc1)
+        count += 1
+        os.remove(pdf_file)
+    continue
+
+elif "rwa-play-on.vercel.app/proxy" in url:
+    vid_file = helper.download_m3u8_proxy(url, f"{name}.mp4")
+    if vid_file:
+        await bot.send_video(chat_id=channel_id, video=vid_file, caption=cc)
+        count += 1
+        os.remove(vid_file)
+    continue
+    if "drive" in url or ".pdf" in url or "pdfs" in url:
                     try:
                         cmd = f'yt-dlp -o "{name}.pdf" "{url}"'
                         download_cmd = f"{cmd} -R 25 --fragment-retries 25"
