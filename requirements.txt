@@ -4,6 +4,6 @@ yt-dlp
 pyromod
 TgCrypto==1.2.5
 pyrogram
-xmltodict 
-requests 
+xmltodict
+requests
 pycryptodomex
