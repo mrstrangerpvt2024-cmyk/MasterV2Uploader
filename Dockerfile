@@ -1,11 +1,23 @@
-FROM python:3.9.6-alpine3.14
+# 🐍 Use a more compatible base image
+FROM python:3.9-slim
+
+# Set working directory
 WORKDIR /app
+
+# Copy all files
 COPY . .
 
-# Install dependencies
-RUN apk add --no-cache gcc libffi-dev musl-dev ffmpeg aria2 \
+# 🧩 Install system dependencies
+RUN apt update && apt install -y \
+    gcc \
+    g++ \
+    libffi-dev \
+    python3-dev \
+    ffmpeg \
+    aria2 \
+    && pip install --upgrade pip setuptools wheel \
     && pip install --no-cache-dir -r requirements.txt \
-    && pip install --no-cache-dir --upgrade pip
+    && apt clean && rm -rf /var/lib/apt/lists/*
 
-# Run the application
-CMD [ "python", "./main.py" ]
+# 🚀 Run the bot
+CMD ["python", "main.py"]
